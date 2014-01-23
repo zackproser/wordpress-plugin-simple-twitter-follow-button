@@ -39,11 +39,10 @@ function stb_init() {
 		'stb_settings_section'
 	);
 
-	register_setting('reading', 'stb_username');
+	register_setting('reading', 'stb_username', 'stb_twitter_username_validation');
 	register_setting('reading', 'stb_button_size');
 
 }
-
 
 
 function stb_settings_section_callback() {
@@ -54,17 +53,40 @@ function stb_username_callback() {
 	echo '<input name="stb_username" id="stb_username" value="' . get_option('stb_username') . '" placeholder="Don\'t Include the @"/>';
 }
 
-/*function stb_button_callback() {
-	echo '<input type="radio" id="radio_small" name="stb_button_size[]"'
-} */
+function stb_button_callback() {
+	$options = get_option('stb_button_size');
+
+	$html =  '<input type="radio" id="radio_small" name="stb_button_size[size]" value="1" ' . checked(1, $options['size'], false ) . '/>';
+	$html .= '<label for="radio_small">Small</label>';
+
+	$html .= '<br><br>'; //buttons should be on separate lines
+
+	$html .= '<input type="radio" id="radio_large" name="stb_button_size[size]" value="2" ' . checked(2, $options['size'], false ) . '/>';
+	$html .= '<label for="radio_large">Large</label>';
+
+	echo $html;
+} 
+
+function stb_twitter_username_validation($input) {
+
+	return strip_tags( stripslashes($input) );
+
+}
 
 function stb_render_twitter_button($content) {
 
 	if(is_singular() && get_option('stb_username')) {
 		
 	$username = get_option('stb_username');
+	$size_setting = get_option('stb_button_size');
 
-	$script = '<a href="https://twitter.com/'. $username . '" class="twitter-follow-button" data-show-count="false" data-size="large">Follow ' . $username . '</a>
+	if($size_setting['size'] == 1) {
+		$button_size = 'small';
+	} else {
+		$button_size = 'large';
+	}
+
+	$script = '<a href="https://twitter.com/'. $username . '" class="twitter-follow-button" data-show-count="false" data-size="' . $button_size . '">Follow ' . $username . '</a>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?\'http\':\'https\';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+\'://platform.twitter.com/widgets.js\';fjs.parentNode.insertBefore(js,fjs);}}(document, \'script\', \'twitter-wjs\');</script>';
 
 	return $content . $script;
