@@ -69,7 +69,19 @@ function stb_button_callback() {
 
 function stb_twitter_username_validation($input) {
 
-	return strip_tags( stripslashes($input) );
+	$username_regex = '/^\@?([a-zA-Z0-9_-]{1,16}$)/';
+
+	if(preg_match($username_regex, $input, $matches)) {
+
+		return strip_tags( stripslashes($input) );
+
+	} else {
+		add_settings_error(
+			'stb_username',
+			'stb_bad_username',
+			'Oops, your Twitter Username appears invalid. Please try again.'
+		);
+	}
 
 }
 
