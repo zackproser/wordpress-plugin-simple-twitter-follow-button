@@ -2,11 +2,11 @@
 
   /*
    Plugin Name: Simple Twitter Follow Me Button
-   Plugin URI: http://www.a-placeholder.com
+   Plugin URI: http://www.zackproser.com
    Description: A dead-simple plugin that adds a Twitter follow button to the end of every post
    Version: 1.0
    Author: Zack Proser
-   Author URI: http://a-placeholder.com
+   Author URI: http://zackproser.com
    License: GPL2
    */
 
@@ -50,7 +50,7 @@ function stb_settings_section_callback() {
 }
 
 function stb_username_callback() {
-	echo '<input name="stb_username" id="stb_username" value="' . get_option('stb_username') . '" placeholder="Don\'t Include the @"/>';
+	echo '<input name="stb_username" id="stb_username" value="' . get_option('stb_username') . '" />';
 }
 
 function stb_button_callback() {
@@ -79,7 +79,7 @@ function stb_twitter_username_validation($input) {
 		add_settings_error(
 			'stb_username',
 			'stb_bad_username',
-			'Oops, your Twitter Username appears invalid. Please try again.'
+			'Oops, your Twitter Username appears empty or invalid. Please try again.'
 		);
 	}
 
@@ -87,7 +87,7 @@ function stb_twitter_username_validation($input) {
 
 function stb_render_twitter_button($content) {
 
-	if(is_singular() && get_option('stb_username')) {
+	if(get_option('stb_username')) {
 		
 	$username = get_option('stb_username');
 	$size_setting = get_option('stb_button_size');
